@@ -21,7 +21,6 @@ class Audit {
         }
         return vote;
     }
-
   async auditTask(roundNumber) {
     console.log('auditTask called with round', roundNumber);
     console.log(
