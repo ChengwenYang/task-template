@@ -1,24 +1,30 @@
 const { namespaceWrapper } = require('../_koiiNode/koiiNode');
+const crypto = require('crypto');
 class Submission {
-  async task(round) {
-    // Write the logic to do the work required for submitting the values and optionally store the result in levelDB
+    async task(round) {
+        try {
+            // Hardcoded data for submission
+            const submissions = [
+                { id: 1, data: 'Data 1', isValid: true },
+                { id: 2, data: 'Data 2', isValid: true },
+                // ... more submissions
+            ];
 
-    // Below is just a sample of work that a task can do
+            let hash = crypto.createHash('sha256').update(submissions.toString()).digest('hex')
+            console.log('hash', hash)
+            console.log('ROUND', round);
 
-    try {
-      const value = 'Hello, World!';
-      console.log('ROUND', round);
+            // Store each submission
 
-      if (value) {
-        // store value on NeDB
-        await namespaceWrapper.storeSet('value', value);
-      }
-      return value;
-    } catch (err) {
-      console.log('ERROR IN EXECUTING TASK', err);
-      return 'ERROR IN EXECUTING TASK' + err;
+                await namespaceWrapper.storeSet('value', hash);
+
+
+            return hash;
+        } catch (err) {
+            console.log('ERROR IN EXECUTING TASK', err);
+            return 'ERROR IN EXECUTING TASK' + err;
+        }
     }
-  }
 
   async submitTask(roundNumber) {
     console.log('submitTask called with round', roundNumber);
